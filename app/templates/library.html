@@ -32,7 +32,6 @@
     }
 </style>
 <div class="container">
-    {% if current_user.is_authenticated %}
         <div>
             <nav>
                 <a href="/">your digital book shelf</a>
@@ -48,11 +47,31 @@
                     Add new book
                 </button>
             </div>
+
+            <div>
+                {% if user_books %}
+                <table>
+                    <tr>
+                        <th>Book</th>
+                        <th>Author</th>
+                        <th>Review</th>
+                        <th>Description</th>
+                    </tr>
+                    
+                        {% for user_book in user_books %}
+                            <tr>
+                                <td><strong>{{ user_book.book.title }}</strong></td>
+                                <td>{{ user_book.book.author.full_name }}</td>
+                                <td>{{ user_book.rating }}</td>
+                                <td>{{ user_book.review_text }}</td>
+                            </tr>
+                        {% endfor %}
+                </table>
+                {% else %}
+                    <p>You haven't register any reviews yet</p>
+                {% endif %}
+            </div>
         </div>
-    {% else %}
-        <p>You are not logged in.</p>
-        <a href="{{ url_for('main.signin') }}">Login</a> |
-        <a href="{{ url_for('main.signup') }}">Sign Up</a>
-    {% endif %}
+
 </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_required, current_user, login_user, logout_user
-from .models import User
+from .models import User, UserBook
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 
@@ -9,6 +9,19 @@ main = Blueprint('main', __name__)
 @main.route("/")
 def index():
     return render_template('index.html')
+
+@main.route("/library")
+@login_required
+def library():
+    user_books = UserBook.query.filter_by(user_id=current_user.id).all()
+    return render_template('library.html', user_books=user_books)
+
+@main.route('/book/new', methods=['GET', 'POST'])
+@login_required
+def add_book():
+    if request.method == 'POST':
+        return redirect(url_for('main.index'))
+    return render_template('new_book.html')
 
 @main.route("/signup", methods=['GET', 'POST'])
 def signup():
