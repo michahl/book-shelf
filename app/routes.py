@@ -72,7 +72,7 @@ def add_review(user_book_id):
     user_book = UserBook.query.get_or_404(user_book_id)
 
     if request.method == 'POST':
-        rating = int(request.form.get('rating'))
+        rating = int(request.form.get('rate'))
         review_text = request.form.get('review_text')
 
         if not rating or not review_text:
