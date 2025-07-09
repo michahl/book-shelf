@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_required, current_user, login_user, logout_user
-from .models import User, UserBook
+from .models import User, UserBook, Author, Book
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
+from .services.openlibrary import search_by_title, search_by_isbn
 
 main = Blueprint('main', __name__)
 
@@ -20,8 +21,49 @@ def library():
 @login_required
 def add_book():
     if request.method == 'POST':
-        return redirect(url_for('main.index'))
-    return render_template('new_book.html')
+        data = request.form
+        title = data.get('title')
+        published_year = data.get('year')
+        author_name = data.get('author')
+        cover = data.get("cover")
+
+        author = Author.query.filter_by(full_name=author_name).first()
+        if not author:
+            author = Author(full_name=author_name)
+            db.session.add(author)
+            db.session.commit()
+
+        book = Book.query.filter_by(title=title, author_id=author.id).first()
+        if not book:
+            book = Book(
+                title=title,
+                published_year=published_year,
+                cover_url=cover,
+                author_id=author.id
+            )
+            db.session.add(book)
+            db.session.commit()
+
+        in_library = UserBook.query.filter_by(user_id=current_user.id, book_id=book.id).first()
+        if not in_library:
+            in_library = UserBook(user_id=current_user.id, book_id=book.id)
+            db.session.add(in_library)
+            db.session.commit()
+
+            return redirect(url_for('main.add_review', user_book_id=in_library))
+
+        return redirect(url_for('main.library'))
+    
+    query = request.args.get('q')
+    search_results = []
+    if query:
+        if query.isdigit() or query.replace("-", "").isdigit():
+            data = search_by_isbn(query)
+        else: 
+            data = search_by_title(query)
+        if data:
+            search_results = data.get('docs', [])[:6]
+    return render_template('new_book.html', results=search_results)
 
 @main.route("/signup", methods=['GET', 'POST'])
 def signup():

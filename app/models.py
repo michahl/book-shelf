@@ -17,8 +17,6 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(75), nullable=False)
     published_year = db.Column(db.Integer)
-    description = db.Column(db.Text())
-    isbn = db.Column(db.String(20), unique=True)
     cover_url = db.Column(db.String(250))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
