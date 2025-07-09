@@ -2,23 +2,27 @@
 
 {% block content %}
 <style>
+.container {
+    width: 100%;
+}
+
 .flex-end {
     display: flex;
     justify-content: end;
 }
 .add-book {
     cursor: pointer;
-    border: 1px solid oklch(92.2% 0 0);
+    background-color: oklch(20.5% 0 0);
     border-radius: 10px;
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
 }
 
 .add-book:hover {
-    background-color: oklch(98.5% 0 0);
+    background-color: oklch(26.9% 0 0);
 }
 .add-book a {
-    color: oklch(37.1% 0 0);
+    color: oklch(98.5% 0 0);
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -27,9 +31,37 @@
 }
 
 .add-book a:hover {
-    color: oklch(20.5% 0 0);
+    color: oklch(97% 0 0);
 }
 
+table {
+    width: 100%;
+    border: 1px solid;
+    border-collapse: collapse;
+}
+
+table tr {
+    border-top: 1px solid;
+}
+
+table tr th {
+    text-align: start;
+    border-right: 1px solid;
+    padding: 0.5rem 1rem;
+    background-color: oklch(92.2% 0 0);
+}
+
+table tr {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+table tr td {
+    border-right: 1px solid;
+    padding: 0.5rem 1rem;
+    max-width: 50px;
+}
+  
 .main-container {
     display: flex;
     justify-content: center;
@@ -43,7 +75,7 @@
     gap: 0.1rem;
 }
 </style>
-<div>
+<div class="container">
             <div class="flex-end">
                 <div class="add-book">
                     <a href="{{ url_for('main.add_book') }}">
@@ -67,7 +99,15 @@
                             <tr>
                                 <td><strong>{{ user_book.book.title }}</strong></td>
                                 <td>{{ user_book.book.author.full_name }}</td>
-                                <td>{{ user_book.rating }}</td>
+                                <td>
+                                    {% for i in range(5) %}
+                                        {% if user_book.rating > i %}
+                                            <span style="color: #e58e09;">★</span>
+                                        {% else %}
+                                            <span style="color: #a3a3a3;">★</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>{{ user_book.review_text }}</td>
                             </tr>
                         {% endfor %}
