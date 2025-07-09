@@ -1,0 +1,39 @@
+body {
+    color: oklch(14.5% 0 0);
+    padding: 2rem 5rem;
+    font-family: 'Plus Jakarta Sans';
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+}
+
+a {
+    text-decoration: none;
+    color: oklch(14.5% 0 0);
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+nav li {
+    display: flex;
+    align-items: center;
+}
+
+nav li a:hover {
+    color: oklch(29.716% 0.00003 271.152);
+}
+
+main {
+    display: flex;
+    justify-content: center;
+}
