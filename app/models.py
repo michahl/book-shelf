@@ -20,7 +20,7 @@ class Book(db.Model):
     title = db.Column(db.String(75), nullable=False)
     published_year = db.Column(db.Integer)
     cover_url = db.Column(db.String(250))
-    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+    author_id = db.Column(UUID(as_uuid=True), db.ForeignKey('author.id'))
     created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     author = db.relationship('Author', back_populates='books')
@@ -41,8 +41,8 @@ class UserBook(db.Model):
     __tablename__ = 'user_book'
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.id'), nullable=False)
+    book_id = db.Column(UUID(as_uuid=True), db.ForeignKey('book.id'), nullable=False)
     added_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     # review data
