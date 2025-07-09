@@ -63,7 +63,7 @@ def add_book():
         else: 
             data = search_by_title(query)
         if data:
-            search_results = data.get('docs', [])[:6]
+            search_results = data.get('docs', [])[:12]
     return render_template('new_book.html', results=search_results)
 
 @main.route('/book/<uuid:user_book_id>/review', methods=['GET', 'POST'])

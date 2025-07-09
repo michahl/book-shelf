@@ -1,20 +1,74 @@
 {% extends './layouts/auth.html' %}
 
 {% block content %}
+<style>
+    form {
+        width: 50dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        gap: 1rem;
+    }
+
+    form .input-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    form .input-container label {
+        color: oklch(70.8% 0 0);
+        font-size: small;
+        margin-bottom: 0.3rem;
+    }
+
+    form .input-container input {
+        padding: 0.5rem 1rem;
+        border: 1px solid oklch(92.2% 0 0);
+        border-radius: 10px;
+    }
+
+        form button {
+        cursor: pointer;
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background-color: oklch(14.5% 0 0);
+        color: oklch(98.5% 0 0);
+        font-size: small;
+    }
+
+    form button:hover {
+        background-color: oklch(26.9% 0 0);
+    }
+
+    .sign-in {
+        font-size: small;
+        color: oklch(55.6% 0 0);
+    }
+
+    .sign-in a {
+        color: oklch(37.1% 0 0);
+    }
+
+    .sign-in a:hover {
+        color: oklch(14.5% 0 0);
+    }
+</style>
 <div>
     <form action="/signup" method="post">
-        <div>
+        <div class="input-container">
             <label for="email">Enter an email address</label>
             <input type="text" name="email" required>
         </div>
 
-        <div>
+        <div class="input-container">
             <label for="password">Enter a strong password</label>
             <input type="password" name="password" required>
         </div>
 
         <button type="submit">Create account</button>
     </form>
-     <p>Already have an account? <a href="/signin">Sign in</a></p>
+     <p class="sign-in">Already have an account? <a href="/signin">Sign in</a></p>
 </div>
 {% endblock %}
