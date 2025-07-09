@@ -1,0 +1,8 @@
+# Book-Shelf
+
+a simple flask web application that allows user to track books they've read, and write reviews with ratings
+
+## Features 
+- User authentication with flask-login
+- It's using sqlite and SQLAlchemy for the Database
+- To get books by title or ISBN i'm using the Open Library API
