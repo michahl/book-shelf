@@ -1,8 +1,10 @@
 from app import db
 from flask_login import UserMixin
+import uuid
+from sqlalchemy.dialects.postgresql import UUID
 
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email = db.Column(db.String(120), unique=True, index=True, nullable=False)
     password_hash = db.Column(db.String(120), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
@@ -14,7 +16,7 @@ class User(UserMixin, db.Model):
         return f'Email: {self.email}'
 
 class Book(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     title = db.Column(db.String(75), nullable=False)
     published_year = db.Column(db.Integer)
     cover_url = db.Column(db.String(250))
@@ -28,7 +30,7 @@ class Book(db.Model):
         return f'Book {self.title} by {self.author.full_name}'
 
 class Author(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     full_name = db.Column(db.String(75), unique=True)
     books = db.relationship("Book", back_populates="author")
 
@@ -38,7 +40,7 @@ class Author(db.Model):
 class UserBook(db.Model):
     __tablename__ = 'user_book'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     added_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
