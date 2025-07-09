@@ -1,3 +1,4 @@
+import uuid
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_required, current_user, login_user, logout_user
 from .models import User, UserBook, Author, Book
@@ -50,9 +51,9 @@ def add_book():
             db.session.add(in_library)
             db.session.commit()
 
-            return redirect(url_for('main.add_review', user_book_id=in_library))
+            return redirect(url_for('main.add_review', user_book_id=in_library.id))
 
-        return redirect(url_for('main.library'))
+        return redirect(url_for('main.add_review', user_book_id=in_library.id))
     
     query = request.args.get('q')
     search_results = []
@@ -66,8 +67,24 @@ def add_book():
     return render_template('new_book.html', results=search_results)
 
 @main.route('/book/<uuid:user_book_id>/review', methods=['GET', 'POST'])
+@login_required
 def add_review(user_book_id):
-    return render_template('add_review')
+    user_book = UserBook.query.get_or_404(user_book_id)
+
+    if request.method == 'POST':
+        rating = int(request.form.get('rating'))
+        review_text = request.form.get('review_text')
+
+        if not rating or not review_text:
+            return render_template('add_review.html', user_book=user_book)
+
+        user_book.rating = rating
+        user_book.review_text = review_text
+        db.session.commit()
+
+        flash('Review added successfully')
+        return redirect(url_for('main.library'))
+    return render_template('add_review.html', user_book=user_book)
 
 @main.route("/signup", methods=['GET', 'POST'])
 def signup():
