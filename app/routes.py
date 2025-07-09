@@ -65,6 +65,10 @@ def add_book():
             search_results = data.get('docs', [])[:6]
     return render_template('new_book.html', results=search_results)
 
+@main.route('/book/<uuid:user_book_id>/review', methods=['GET', 'POST'])
+def add_review(user_book_id):
+    return render_template('add_review')
+
 @main.route("/signup", methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
